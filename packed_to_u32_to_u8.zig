@@ -2,14 +2,13 @@ const std = @import("std");
 
 const Voxel = packed struct {
     block_id: u8, // 256 different block types,
-    andorment_id: u8, // 256 different adornments
+    andorment_id: u7, // 128 different adornments
     up_x: i2,
     up_y: i2,
     up_z: i2,
     health: u4,
     lighting: u4,
-    selected: bool,
-    locked: bool,
+    opacity: u3,
 };
 
 pub fn main() void {
@@ -21,8 +20,7 @@ pub fn main() void {
         .up_z = 0,
         .health = 15,
         .lighting = 7,
-        .selected = false,
-        .locked = false,
+        .opacity = 7,
     };
     const v2: Voxel = .{
         .block_id = 101,
@@ -32,8 +30,7 @@ pub fn main() void {
         .up_z = -1,
         .health = 8,
         .lighting = 15,
-        .selected = false,
-        .locked = true,
+        .opacity = 0,
     };
     const voxels: [2]Voxel align(8) = [_]Voxel{ v1, v2 };
     for (voxels) |v| {
@@ -70,12 +67,11 @@ fn printVoxel(v: Voxel) void {
     std.debug.print("up_z:  {}\n", .{v.up_z});
     std.debug.print("health:  {}\n", .{v.health});
     std.debug.print("lighting:  {}\n", .{v.lighting});
-    std.debug.print("selected:  {}\n", .{v.selected});
-    std.debug.print("locked:  {}\n", .{v.locked});
+    std.debug.print("opacity:  {}\n", .{v.opacity});
     std.debug.print("\n", .{});
 }
 
-// run:
+// run  :
 // $ zig run .\packed_to_u32_to_u8.zig
 
 // Voxel:
@@ -86,8 +82,7 @@ fn printVoxel(v: Voxel) void {
 // up_z:  0
 // health:  15
 // lighting:  7
-// selected:  false
-// locked:  false
+// opacity:  7
 
 // Voxel:
 // block_id: 101
@@ -97,13 +92,12 @@ fn printVoxel(v: Voxel) void {
 // up_z:  -1
 // health:  8
 // lighting:  15
-// selected:  false
-// locked:  true
+// opacity:  0
 
 // as bytes:
-// 1 2 199 31 101 39 49 190
-// voxel as u32: 533135873
-// voxel as u32: 3190892389
+// 1 130 227 239 101 167 24 31
+// voxel as u32: 4024664577
+// voxel as u32: 521709413
 
 // Voxel:
 // block_id: 1
@@ -113,8 +107,7 @@ fn printVoxel(v: Voxel) void {
 // up_z:  0
 // health:  15
 // lighting:  7
-// selected:  false
-// locked:  false
+// opacity:  7
 
 // Voxel:
 // block_id: 101
@@ -124,5 +117,4 @@ fn printVoxel(v: Voxel) void {
 // up_z:  -1
 // health:  8
 // lighting:  15
-// selected:  false
-// locked:  true
+// opacity:  0
